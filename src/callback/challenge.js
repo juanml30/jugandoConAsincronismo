@@ -9,8 +9,9 @@ function fetchDate(url_api,callback) {
                 callback(null,JSON.parse(xhttp.responseText))
             } else{
                 const error = new Error('Error '+url_api)
-                 
+
             }
         }
     }
+    xhttp.send();
 }
