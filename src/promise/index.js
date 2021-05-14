@@ -1,41 +1,30 @@
-const { error } = require("console");
-const { resolve } = require("path");
+// modulo para hacer las peticiones
+let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
-const somethingWillHappen = () => {
-    return new Promise((resolve, reject) => {
-        if (true) {
-            resolve('HEY!');
-        } else {
-            reject('Whooops');
-        }
-    })
+
+// funcion principal
+const fetchData = (url_api) => {
+  return new Promise((resolve, reject) => {
+    // instanciamos la conexion
+    const xhttp = new XMLHttpRequest();
+    // abrir una conexion con el metodo, la ruta y si es asincrono
+    xhttp.open('GET', url_api, true);
+    // validacion del llamado
+    xhttp.onreadystatechange = (() => {
+      // comparamos el 4 porque eso indica que se completo la peticion
+      if(xhttp.readyState === 4){
+        // verificamos que el status este en 200, 200 es que es correcto
+        xhttp.status === 200
+          // si esta en 200
+          ? resolve(JSON.parse(xhttp.responseText))
+          // si no esta en 200
+          : reject(new Error('Error ' + url_api))
+      }
+    });
+    // por ultimo enviamos la peticion
+    xhttp.send();
+  });
 }
 
-somethingWillHappen()
-    .then(response => console.log(response))
-    .catch(err => console.error(err));
-
-const somethingWillHappen2 = () => {
-    return new Promise((resolve, reject) => {
-        if (true) {
-            setTimeout(() => {
-                resolve("true");
-            }, 2000)
-        } else {
-            const error = new Error('segndoError!');
-            reject(error);
-        }
-    })
-}
-
-somethingWillHappen2()
-    .then(response => console.log(response))
-    .catch(err => console.error(err))
-
-Promise.all([somethingWillHappen(), somethingWillHappen2()])
-    .then(response => {
-        console.log("Array of results", response);
-    })
-    .catch(err => {
-        console.error(err);
-    })
+// exportamos la funcion
+module.exports = fetchData;
