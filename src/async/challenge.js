@@ -18,3 +18,4 @@ const anotherFunction = async () => {
 console.log ('befooooor');
 anotherFunction(API);
 console.log('After');
+
